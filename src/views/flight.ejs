@@ -1,0 +1,207 @@
+<!-- Button trigger modal -->
+<button id="btnModal" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#modal"></button>
+<h1 class="display-2 text-center mt-3">Flight</h1>
+
+<div class="d-flex justify-content-between my-3">
+  <form class="d-flex" action="/flight" method="get">
+    <input class="form-control me-2" name="q" type="search" placeholder="Search" aria-label="Search" />
+    <button class="btn btn-outline-success" type="submit">Search</button>
+  </form>
+  <button id="btnCreateFlight" type="button" class="btn btn-primary">Create Flight</button>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="/flight" method="post">
+        <div class="modal-header">
+          <h5 class="modal-title">Modal title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="flight-arrival-date" class="form-label">Arrival Date</label>
+            <input required type="datetime-local" name="arrivalDate" class="form-control" id="flight-arrival-date" />
+          </div>
+          <div class="mb-3">
+            <label for="flight-departure-date" class="form-label">Departure Date</label>
+            <input required type="datetime-local" name="departureDate" class="form-control" id="flight-departure-date" />
+          </div>
+          <div class="mb-3">
+            <label for="flight-airline" class="form-label">Airline</label>
+            <select class="form-select" aria-label="Select option" name="airlineId" id="flight-airline">
+              <option value="">Select option</option>
+
+              <% airline.forEach((airline) => { %>
+              <option value="<%= airline._id %>">
+                <div><img width="30" height="30" src="<%= airline.logo %>" alt="" /> <%= airline.name %></div>
+              </option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="flight-from" class="form-label">From</label>
+            <select class="form-select" aria-label="Select option" name="from" id="flight-from">
+              <option value="">Select option</option>
+
+              <% airports.forEach((airport) => { %>
+              <option value="<%= airport._id %>">
+                <div><%= airport.name %></div>
+              </option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="flight-to" class="form-label">to</label>
+            <select class="form-select" aria-label="Select option" name="to" id="flight-to">
+              <option value="">Select option</option>
+
+              <% airports.forEach((airport) => { %>
+              <option value="<%= airport._id %>">
+                <div><%= airport.name %></div>
+              </option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="flight-price" class="form-label">Price $</label>
+            <input required type="number" name="price" class="form-control" id="flight-price" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Submit</button>
+          <button type="reset" class="btn btn-secondary">Reset</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<table class="table table-striped table-hover w-100" id="tableID">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Code</th>
+      <th scope="col">Arrival</th>
+      <th scope="col">Departure</th>
+      <th scope="col">Airline</th>
+      <th scope="col">From</th>
+      <th scope="col">To</th>
+      <th scope="col">Price</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% function formatDateTime(m) { return m.getUTCFullYear() + "/" + ("0" + (m.getUTCMonth()+1)).slice(-2) + "/" + ("0" +
+    m.getUTCDate()).slice(-2) + " " + ("0" + m.getUTCHours()).slice(-2) + ":" + ("0" + m.getUTCMinutes()).slice(-2) + ":" + ("0" +
+    m.getUTCSeconds()).slice(-2); } flights.forEach((flight, index) => { %>
+    <tr
+      id="<%= flight._id %>"
+      data-arrivalDate="<%= flight.arrivalDate %>"
+      data-departureDate="<%= flight.departureDate %>"
+      data-airlineId="<%= flight.airlineId %>"
+      data-from="<%= flight.from %>"
+      data-to="<%= flight.to %>"
+      data-price="<%= flight.price %>"
+    >
+      <td><%= index + 1 %></td>
+      <td><%= flight.code %></td>
+      <td><%= formatDateTime(new Date(flight.arrivalDate)) %></td>
+      <td><%= formatDateTime(new Date(flight.departureDate)) %></td>
+      <td>
+        <div class="d-flex justify-content-center align-items-center gap-2">
+          <img src="<%= flight.airlineId.logo %>" width="30" height="30" alt="" />
+          <span> <%= flight.airlineId.name %> </span>
+        </div>
+      </td>
+      <td>
+        <div>Name: <%= flight.from.name %></div>
+        <div>Code: <%= flight.from.code %></div>
+        <div>Location: <%= flight.from.location %></div>
+      </td>
+      <td>
+        <div>Name: <%= flight.to.name %></div>
+        <div>Code: <%= flight.to.code %></div>
+        <div>Location: <%= flight.to.location %></div>
+      </td>
+      <td><%= flight.price %></td>
+      <td class="">
+        <div class="d-flex justify-content-center align-items-center h-100 gap-2">
+          <button class="btn btn-warning" onclick="tableText('<%= flight._id %>')">
+            <i class="bi bi-pencil-fill"></i>
+          </button>
+          <a href="/flight/<%= flight._id %>/delete" class="btn btn-danger">
+            <i class="bi bi-trash-fill"></i>
+          </a>
+        </div>
+      </td>
+    </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+<script>
+  const btnModal = document.getElementById('btnModal');
+  const modal = document.getElementById('modal');
+  const form = modal.querySelector('form');
+
+  const btnCreateFlight = document.getElementById('btnCreateFlight');
+</script>
+
+<script>
+  function tableText(flightId) {
+    form.action = `/flight/${flightId}/update`;
+    form.method = 'post';
+
+    const titleElement = modal.querySelector('h5');
+    titleElement.textContent = 'Update Flight';
+
+    const arrivalDateElement = document.getElementById('flight-arrival-date');
+    const departureDateElement = document.getElementById('flight-departure-date');
+    const airlineElement = document.getElementById('flight-airline');
+
+    const flightElement = document.getElementById(flightId);
+    const { arrivaldate, departuredate, airlineid } = flightElement.dataset;
+
+    arrivalDateElement.value = formatDateTime(arrivaldate);
+    departureDateElement.value = formatDateTime(departuredate);
+    airlineElement.value = airlineid;
+
+    btnModal.click();
+  }
+</script>
+
+<script>
+  btnCreateFlight.onclick = () => {
+    form.action = '/flight';
+    form.method = 'post';
+
+    const titleElement = modal.querySelector('h5');
+    titleElement.textContent = 'Create Flight';
+
+    const arrivalDateElement = document.getElementById('flight-arrival-date');
+    const departureDateElement = document.getElementById('flight-departure-date');
+    const airlineElement = document.getElementById('flight-airline');
+
+    arrivalDateElement.value = '';
+    departureDateElement.value = '';
+    airlineElement.value = '';
+
+    btnModal.click();
+  };
+</script>
+
+<script>
+  function formatDateTime(time) {
+    var date = new Date(time);
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    var year = date.getFullYear();
+    var hours = date.getHours() % 12 || 12;
+    var minutes = date.getMinutes();
+    var ampm = date.getHours() < 12 ? 'AM' : 'PM';
+    var formattedTime = month + '/' + day + '/' + year + ' ' + hours + ':' + minutes + ' ' + ampm;
+    return formattedTime;
+  }
+</script>

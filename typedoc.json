@@ -1,0 +1,10 @@
+{
+  "entryPointStrategy": "expand",
+  "entryPoints": ["./src"],
+  "out": "./docs",
+  "excludePrivate": true,
+  "includeVersion": true,
+  "name": "Project Flight Order",
+  "plugin": ["typedoc-theme-hierarchy"],
+  "theme": "hierarchy"
+}

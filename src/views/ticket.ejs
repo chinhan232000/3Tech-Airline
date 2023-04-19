@@ -1,0 +1,46 @@
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-keyboard="false" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="d-flex w-100 justify-content-center align-items-center">
+      <div style="background-color: white; padding: 50px">
+        <img src="" alt="" id="imgQRcode" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="w-100 d-flex flex-wrap">
+  <% function formatDateTime(m) { return m.getUTCFullYear() + "/" + ("0" + (m.getUTCMonth()+1)).slice(-2) + "/" + ("0" +
+  m.getUTCDate()).slice(-2) + " " + ("0" + m.getUTCHours()).slice(-2) + ":" + ("0" + m.getUTCMinutes()).slice(-2) + ":" + ("0" +
+  m.getUTCSeconds()).slice(-2); } tickets.forEach(ticket => { %>
+  <div style="margin: 20px">
+    <div class="card" style="width: 18rem">
+      <img src="<%= ticket.seatId.flightId.airlineId.logo %>" class="card-img-top" alt="..." />
+      <div class="card-body">
+        <h5 class="card-title">Airline name: <%= ticket.seatId.flightId.airlineId.name %></h5>
+
+        <p class="card-text">Flight code: <%= ticket.seatId.flightId.code %></p>
+        <p class="card-text">Arrival date: <%= formatDateTime(ticket.seatId.flightId.arrivalDate) %></p>
+        <p class="card-text">Departure date: <%= formatDateTime(ticket.seatId.flightId.departureDate) %></p>
+        <p class="card-text">Seat <%= ticket.seatId.code %></p>
+
+        <a href="#" class="btn btn-primary" onclick="shownQrCode('<%= ticket._id %>')">Show QR code</a>
+      </div>
+    </div>
+  </div>
+  <% }) %>
+</div>
+
+<script>
+  const btnQrCode = document.getElementById('btnQrCode');
+  const imgQRcode = document.getElementById('imgQRcode');
+  const btnShownModal = document.getElementById('btnShownModal');
+
+  const url = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=';
+  function shownQrCode(id) {
+    const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('staticBackdrop'));
+    modal.show();
+    const qrData = `http://localhost:3000/ticket/${encodeURIComponent(id)}`;
+    imgQRcode.src = url + qrData;
+  }
+</script>

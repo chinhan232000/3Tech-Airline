@@ -1,0 +1,37 @@
+.seat {
+  width: 30px;
+  height: 30px;
+  background-color: #ef1919;
+  border-radius: 5px;
+  margin: 5px;
+  display: inline-block;
+}
+
+.available {
+  background-color: #00ff00;
+}
+
+.unavailable {
+  cursor: pointer;
+  background-color: #ff0000;
+}
+
+.selected {
+  background-color: #0000ff;
+}
+
+.line-mid {
+  width: 30px;
+  margin: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image-flight {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 130%;
+}
