@@ -1,4 +1,11 @@
 /**
+ * @module appConfigModule
+ * @description hhadhadj adjh jkahdjk ahkjd kạdj khakj dkaj
+ * @author Nhan Vo
+ * @date 15 April 2023
+ */
+
+/**
 
 Application configuration object.
 @typedef {Object} AppConfig
